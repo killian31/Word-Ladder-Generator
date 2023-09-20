@@ -1,8 +1,8 @@
-from tqdm import tqdm
+import argparse
 
 
 # Function to find valid neighbors of a word
-def find_neighbors(word):
+def find_neighbors(word, french_words):
     neighbors = set()
     for i in range(len(word)):
         for char in "abcdefghijklmnopqrstuvwxyz":
@@ -22,7 +22,7 @@ def find_neighbors(word):
 
 
 # Function to find the shortest word ladder using BFS
-def find_word_ladder(start, target):
+def find_word_ladder(start, target, french_words):
     visited = set()
     queue = [[start]]
 
@@ -30,13 +30,12 @@ def find_word_ladder(start, target):
         path = queue.pop(0)
         word = path[-1]
 
-        print(f"Checking {word}")
         if word == target:
             return path
 
         if word not in visited:
             visited.add(word)
-            neighbors = find_neighbors(word)
+            neighbors = find_neighbors(word, french_words)
             for neighbor in neighbors:
                 new_path = list(path)
                 new_path.append(neighbor)
@@ -49,11 +48,15 @@ if __name__ == "__main__":
     with open("francais.txt", "r", encoding="utf-8") as file:
         french_words = set(word.strip().lower() for word in file)
 
-    # Input from the user
-    start_word = input("Enter the starting word (not too long): ").strip().lower()
-    target_word = input("Enter the target word: ").strip().lower()
-
-    word_ladder = find_word_ladder(start_word, target_word)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--start_word", type=str, help="word to start the ladder with", default="terre"
+    )
+    parser.add_argument("--end_word", type=str, help="word to end the ladder with")
+    args = parser.parse_args()
+    start_word = args.start_word
+    target_word = args.end_word
+    word_ladder = find_word_ladder(start_word, target_word, french_words)
 
     if word_ladder:
         print("Shortest Word Ladder:")
