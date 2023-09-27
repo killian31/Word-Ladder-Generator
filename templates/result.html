@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Échelle de mots générée</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Échelle de mots générée</h1>
+    {% if error %}
+    <p>{{ error }}</p>
+    {% else %}
+    <p>Échelle de mots: {{ word_ladder|join(" -> ")|title }}</p>
+    <form method="POST" action="/play-again">
+        <input type="submit" value="Nouveaux mots">
+    </form>
+    {% endif %}
+</body>
+</html>
+
